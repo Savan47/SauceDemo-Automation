@@ -9,15 +9,25 @@ The framework is built using industry-standard design patterns:
 - **Pytest Framework**: Utilizes fixtures for efficient browser lifecycle management.
 - **Data-Driven Testing (Parametrization)**: Executes multiple login scenarios (valid, invalid, and empty credentials) through a single test function.
 
-## 📁 Project Structure
-- `objects.py`: Contains the `BasePage` (parent) and `SouceLoginPage` (child) classes.
-- `test_sauce.py`: Contains the actual test cases and parametrized data sets.
-- `report.html`: Automatically generated HTML report showing test results and execution details.
+📁 Project Structure
 
-## 📊 Reporting
-The project uses `pytest-html` to generate detailed visual reports. This is essential for tracking test history and identifying bugs quickly.
+objects.py: Contains the BasePage and SouceLoginPage classes.
 
-## 🛠️ Installation & Usage
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git)
+test_sauce.py: Contains the actual test cases and parametrized data sets.
+
+.gitignore: Prevents temporary files and local reports from cluttering the repository.
+
+🛠️ Installation & Usage
+
+Clone the repository:
+
+Bash
+git clone https://github.com/Savan47/SauceDemo-Automation.git
+Install dependencies:
+
+Bash
+pip install selenium pytest pytest-html webdriver-manager
+Run tests and generate report:
+
+Bash
+pytest --html=report.html
