@@ -2,15 +2,26 @@ import pytest
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from objects import SouceLoginPage
+import os
 
 
 
 
 @pytest.fixture
-def driver():
+def driver(request):
     driver = webdriver.Chrome()
     driver.implicitly_wait(10)
     yield driver
+
+    report = getattr(request.node, "rep_call", None)
+
+    if report and report.failed:
+        if not os.path.exists("screenshots"):
+            os.makedirs("screenshots")
+        file_name = f"screenshots/{request.node.name}.png"
+        driver.save_screenshot(file_name)
+        print(f"\n Screenshot saved: {file_name}")
+
     driver.quit()
 
 
@@ -53,6 +64,8 @@ def test_login_invalid_multiple(driver, user, password, message):
     ulaz.click_login()
     
     
-    rezultat = driver.find_element(By.XPATH, "//*[@id='login_button_container']/div/form/div[3]/h3").text
     
-    assert rezultat == message
+    assert ulaz.get_error_message() == message
+
+
+

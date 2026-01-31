@@ -25,5 +25,6 @@ class SouceLoginPage(BasePage):
 
     def click_login(self):
         self.find_element(self.login_button).click()
-    
+    def get_error_message(self):
+        return self.driver.find_element(By.XPATH, "//*[@id='login_button_container']/div/form/div[3]/h3").text
     
