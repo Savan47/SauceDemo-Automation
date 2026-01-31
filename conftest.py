@@ -2,6 +2,7 @@ import pytest
 import os
 from selenium import webdriver
 from objects import SouceLoginPage
+from selenium.webdriver.chrome.options import Options
 
 @pytest.fixture
 def login_page(driver):
@@ -10,7 +11,13 @@ def login_page(driver):
 
 @pytest.fixture
 def driver(request):
-    driver = webdriver.Chrome()
+    chrome_options = Options()
+    chrome_options.add_argument("--incognito")
+    chrome_options.add_argument("--maximize-window")
+
+   
+
+    driver = webdriver.Chrome(options=chrome_options)
     driver.implicitly_wait(10)
     yield driver
     
