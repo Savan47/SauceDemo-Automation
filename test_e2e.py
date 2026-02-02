@@ -1,33 +1,34 @@
 from selenium.webdriver.common.by import By
-import time 
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
+from objects import InventoryPage, CheckoutPage
 def test_from_login_to_buy(logged_in_driver):
 
-    driver = logged_in_driver
-
-   
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-backpack").click()
+    #driver = logged_in_driver
+    inventory = InventoryPage(logged_in_driver)
+    checkout = CheckoutPage(logged_in_driver)
+    inventory.add_items_to_cart()
+    inventory.go_to_cart()
     
-    
-    driver.find_element(By.ID, "add-to-cart-sauce-labs-bike-light").click()
-   
-    
-    driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-    
-
-    assert "cart.html" in driver.current_url
-    driver.find_element(By.ID, "checkout").click()
-    assert "checkout-step-one.html" in driver.current_url
-    driver.find_element(By.ID, "first-name").send_keys("Marko")
-   
-    driver.find_element(By.ID, "last-name").send_keys("Polo")
-    
-    driver.find_element(By.ID, "postal-code").send_keys("222")
-    
-    driver.find_element(By.ID, "continue").click()
+    assert "cart.html" in logged_in_driver.current_url
+    checkout.start_checkout()
+    assert "checkout-step-one.html" in logged_in_driver.current_url
+    checkout.fill_personal_info("Marko", "Polo", "222")
   
-    assert "checkout-step-two.html" in driver.current_url
-    driver.find_element(By.ID, "finish").click()
-    assert driver.find_element(By.CLASS_NAME, "complete-header").text == "Thank you for your order!"
-    assert "checkout-complete.html" in driver.current_url
+    assert "checkout-step-two.html" in logged_in_driver.current_url
+    checkout.finish_order()
+    assert checkout.get_success_text() == "Thank you for your order!"
+    assert "checkout-complete.html" in logged_in_driver.current_url
+
+def test_checkout_error_missing_last_name(logged_in_driver):
+    inventory = InventoryPage(logged_in_driver)
+    checkout = CheckoutPage(logged_in_driver)
+
+    inventory.add_items_to_cart()
+    inventory.go_to_cart()
+    checkout.start_checkout()
+
+    
+    checkout.fill_personal_info("Marko", "", "222")
+
+    
+    error_text = logged_in_driver.find_element(By.CSS_SELECTOR, "[data-test='error']").text
+    assert "Error: Last Name is required" in error_text
