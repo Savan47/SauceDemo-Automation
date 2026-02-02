@@ -92,3 +92,22 @@ class CheckoutPage(BasePage):
     def get_displayed_subtotal(self):
         full_text = self.find_element(self.subtotal_label).text
         return float(full_text.split("$")[1])
+class CartPage(BasePage):
+    #Locators
+    remove_btn = (By.CSS_SELECTOR, ".btn.btn_secondary.btn_small.cart_button")
+    cart_badge = (By.CLASS_NAME, "shopping_cart_badge")
+
+    def click_remove_btn(self):
+        self.find_element(self.remove_btn).click()
+
+    def get_cart_badge_text(self):
+        return self.find_element(self.cart_badge).text
+    
+    def is_badge_displayed(self):
+    
+        badge_list = self.driver.find_elements(*self.cart_badge)
+        
+        if len(badge_list) == 0:
+            return False
+        else:
+            return True
