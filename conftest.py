@@ -3,7 +3,17 @@ import os
 from selenium import webdriver
 from objects import SouceLoginPage, InventoryPage, CheckoutPage
 from selenium.webdriver.chrome.options import Options
+import logging
 
+
+
+def pytest_configure(config):
+    
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
 
 @pytest.fixture
 def inventory_page(logged_in_driver):

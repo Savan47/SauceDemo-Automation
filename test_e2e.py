@@ -1,8 +1,11 @@
-from selenium.webdriver.common.by import By
 from objects import InventoryPage, CheckoutPage
+import logging
+
 def test_from_login_to_buy(logged_in_driver, inventory_page, checkout_page):
 
+    logging.info("--- Starting E2E Purchase Test ---")
     inventory_page.add_items_to_cart()
+    logging.info("Items added to cart successfully")
     inventory_page.go_to_cart()
     
     assert "cart.html" in logged_in_driver.current_url
