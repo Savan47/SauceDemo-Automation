@@ -4,6 +4,7 @@ from selenium import webdriver
 from objects import SouceLoginPage, InventoryPage, CheckoutPage, CartPage
 from selenium.webdriver.chrome.options import Options
 import logging
+import allure
 
 
 
@@ -52,7 +53,12 @@ def driver(request):
             os.makedirs("screenshots")
         file_name = f"screenshots/{request.node.name}.png"
         driver.save_screenshot(file_name)
-    
+
+    allure.attach(
+            driver.get_screenshot_as_png(),
+            name=f"Screenshot_{request.node.name}",
+            attachment_type=allure.attachment_type.PNG
+    )
     driver.quit()
 
 @pytest.fixture

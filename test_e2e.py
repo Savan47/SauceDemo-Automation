@@ -23,7 +23,7 @@ def test_from_login_to_buy(logged_in_driver, inventory_page, checkout_page):
   
     assert "checkout-step-two.html" in logged_in_driver.current_url
     checkout_page.finish_order()
-    assert checkout_page.get_success_text() == "Thank you for your order!"
+    assert checkout_page.get_success_text() == "Thank you for your order!BLABLA"
     assert "checkout-complete.html" in logged_in_driver.current_url
 
 def test_checkout_error_missing_last_name(logged_in_driver):

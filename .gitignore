@@ -4,3 +4,5 @@ venv/
 .env
 *.html
 screenshots/
+allure-results/
+moj_folder/
