@@ -30,5 +30,5 @@ def test_checkout_error_missing_last_name(logged_in_driver):
     checkout.fill_personal_info("Marko", "", "222")
 
     
-    error_text = logged_in_driver.find_element(By.CSS_SELECTOR, "[data-test='error']").text
-    assert "Error: Last Name is required" in error_text
+    
+    assert "Error: Last Name is required" in checkout.get_error_message()

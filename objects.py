@@ -1,15 +1,18 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class BasePage():
     def __init__(self, driver):
         self.driver = driver
+        self.wait = WebDriverWait(self.driver, 10)
 
     def open_page(self, url):
         self.driver.get(url)
 
     def find_element(self, locator):
-        return self.driver.find_element(*locator)
+        return self.wait.until(EC.presence_of_element_located(locator))
 
 class SouceLoginPage(BasePage):
         #Locators
@@ -26,8 +29,8 @@ class SouceLoginPage(BasePage):
     def click_login(self):
         self.find_element(self.login_button).click()
     def get_error_message(self):
-        return self.driver.find_element(By.XPATH, "//*[@id='login_button_container']/div/form/div[3]/h3").text
-    
+        locator = (By.XPATH, "//*[@id='login_button_container']/div/form/div[3]/h3")
+        return self.find_element(locator).text
 
 class InventoryPage(BasePage):
     # Locators
@@ -51,6 +54,7 @@ class CheckoutPage(BasePage):
     continue_btn = (By.ID, "continue")
     finish_btn = (By.ID, "finish")
     success_msg = (By.CLASS_NAME, "complete-header")
+    error_container = (By.CSS_SELECTOR, "[data-test='error']")
 
     def start_checkout(self):
         self.find_element(self.checkout_btn).click()
@@ -66,3 +70,6 @@ class CheckoutPage(BasePage):
 
     def get_success_text(self):
         return self.find_element(self.success_msg).text
+    
+    def get_error_message(self):
+        return self.find_element(self.error_container).text
