@@ -1,8 +1,17 @@
 import pytest
 import os
 from selenium import webdriver
-from objects import SouceLoginPage
+from objects import SouceLoginPage, InventoryPage, CheckoutPage
 from selenium.webdriver.chrome.options import Options
+
+
+@pytest.fixture
+def inventory_page(logged_in_driver):
+    return InventoryPage(logged_in_driver)
+
+@pytest.fixture
+def checkout_page(logged_in_driver):
+    return CheckoutPage(logged_in_driver)
 
 @pytest.fixture
 def login_page(driver):

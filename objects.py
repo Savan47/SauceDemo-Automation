@@ -47,6 +47,8 @@ class InventoryPage(BasePage):
 
 class CheckoutPage(BasePage):
     # Locators
+    item_prices = (By.CLASS_NAME, "inventory_item_price")
+    subtotal_label = (By.CLASS_NAME, "summary_subtotal_label")
     checkout_btn = (By.ID, "checkout")
     first_name = (By.ID, "first-name")
     last_name = (By.ID, "last-name")
@@ -73,3 +75,13 @@ class CheckoutPage(BasePage):
     
     def get_error_message(self):
         return self.find_element(self.error_container).text
+    def get_calculated_item_total(self):
+        prices = self.driver.find_elements(*self.item_prices)
+        total = 0.0
+        for price_element in prices:
+            price_value = float(price_element.text.replace("$", ""))
+            total += price_value
+        return total
+    def get_displayed_subtotal(self):
+        full_text = self.find_element(self.subtotal_label).text
+        return float(full_text.split("$")[1])
