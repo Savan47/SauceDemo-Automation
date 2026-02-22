@@ -3,30 +3,38 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import logging
 
-
+# BASE PAGE: Contains common functionality shared across all pages to avoid code duplication
 class BasePage():
     def __init__(self, driver):
         self.driver = driver
+        # Explicit Wait: Defined once here to be reused in all child classes
         self.wait = WebDriverWait(self.driver, 10)
         self.logger = logging.getLogger(__name__)
 
     def open_page(self, url):
+        """Navigates to a specific URL"""
         self.driver.get(url)
 
+    """
+        Wait until the element is present in the DOM before returning it.
+        This prevents 'NoSuchElementException' due to slow loading.
+        """
     def find_element(self, locator):
         self.logger.info(f"Looking for element: {locator}")
         return self.wait.until(EC.presence_of_element_located(locator))
-    
+
+    #Wait until the element is clickable before performing the action
     def click_element(self, locator):
         self.logger.info(f"Clicking on element: {locator}")
         self.wait.until(EC.element_to_be_clickable(locator)).click()
-
+        
+# PAGE OBJECTS: Each class represents a specific page of the application
 class SouceLoginPage(BasePage):
-        #Locators
+        #Locators Stored as tuples for easy maintenance (Separation of Concerns)
     user_name = (By.ID, "user-name")
     password = (By.ID, "password")
     login_button = (By.ID, "login-button")
-
+    # Action Methods: Encapsulate user interactions
     def type_username(self, user):
         self.find_element(self.user_name).send_keys(user)
 
